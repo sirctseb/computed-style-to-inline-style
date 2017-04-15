@@ -7,7 +7,7 @@
     root.computedStyleToInlineStyle = factory(); // Browser.
   }
 }(this, function() {
-  return function computedStyleToInlineStyle(element, recursive) {
+  return function computedStyleToInlineStyle(element, recursive, properties) {
     if (!element) {
       throw new Error("No element specified.");
     }
@@ -25,8 +25,10 @@
     var computedStyle = getComputedStyle(element, null);
     for (var i = 0; i < computedStyle.length; i++) {
       var property = computedStyle.item(i);
-      var value = computedStyle.getPropertyValue(property);
-      element.style[property] = value;
+      if (!properties || properties.indexOf(property) !== -1) {
+          var value = computedStyle.getPropertyValue(property);
+          element.style[property] = value;
+      }
     }
   };
 }));
